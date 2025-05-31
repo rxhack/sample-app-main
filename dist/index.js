@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const process = require("process");
 const tally_js_1 = require("./tally.js");
-const database_js_1 = require("./database.js");
+//const database_js_1 = require("./database.js");
 const logger_js_1 = require("./logger.js");
 function parseCommandlineOptions() {
     let retval = new Map();
@@ -23,7 +23,7 @@ function parseCommandlineOptions() {
 }
 //Update commandline overrides to configuration options
 let cmdConfig = parseCommandlineOptions();
-database_js_1.database.updateCommandlineConfig(cmdConfig);
+//database_js_1.database.updateCommandlineConfig(cmdConfig);
 tally_js_1.tally.updateCommandlineConfig(cmdConfig);
 //start import process
 tally_js_1.tally.importData()

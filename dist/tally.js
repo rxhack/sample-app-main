@@ -8,7 +8,7 @@ const http = require("http");
 const yaml = require("js-yaml");
 const utility_js_1 = require("./utility.js");
 const logger_js_1 = require("./logger.js");
-const database_js_1 = require("./database.js");
+//const database_js_1 = require("./database.js");
 class _tally {
     constructor() {
         this.lstTableMaster = [];
@@ -259,8 +259,8 @@ class _tally {
                         this.config.todate = lstCompanyInfoParts[3];
                     }
                     //clear config table of database and insert active company info to config table
-                    await database_js_1.database.execute('truncate table config;');
-                    await database_js_1.database.execute(`insert into config(name,value) values("Update Timestamp","${new Date().toLocaleString()}"),("Company Name","${companyName}"),("Period From","${this.config.fromdate}"),("Period To","${this.config.todate}");`);
+                    // await database_js_1.database.execute('truncate table config;');
+                    // await database_js_1.database.execute(`insert into config(name,value) values("Update Timestamp","${new Date().toLocaleString()}"),("Company Name","${companyName}"),("Period From","${this.config.fromdate}"),("Period To","${this.config.todate}");`);
                 }
                 else {
                     reject('Cannot detect First/Last voucher date from company');
