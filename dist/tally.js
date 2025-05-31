@@ -8,7 +8,7 @@ const http = require("http");
 const yaml = require("js-yaml");
 const utility_js_1 = require("./utility.js");
 const logger_js_1 = require("./logger.js");
-//const database_js_1 = require("./database.js");
+const database_js_1 = require("./database.js");
 class _tally {
     constructor() {
         this.lstTableMaster = [];
@@ -57,96 +57,96 @@ class _tally {
             throw err;
         }
     }
-    // importData() {
-    //     return new Promise(async (resolve, reject) => {
-    //         try {
-    //             if (/^(mssql|mysql)$/g.test(database_js_1.database.config.technology)) {
-    //                 //update active company information before starting import
-    //                 logger_js_1.logger.logMessage('Updating company information configuration table [%s]', new Date().toLocaleDateString());
-    //                 await this.saveCompanyInfo();
-    //             }
-    //             //prepare substitution list of runtime values to reflected in TDL XML
-    //             let configTallyXML = new Map();
-    //             configTallyXML.set('fromDate', utility_js_1.utility.Date.parse(this.config.fromdate, 'yyyy-MM-dd'));
-    //             configTallyXML.set('toDate', utility_js_1.utility.Date.parse(this.config.todate, 'yyyy-MM-dd'));
-    //             configTallyXML.set('targetCompany', this.config.company ? utility_js_1.utility.String.escapeHTML(this.config.company) : '##SVCurrentCompany');
-    //             if (/^(mssql|mysql)$/g.test(database_js_1.database.config.technology)) {
-    //                 //truncate master/transaction tables
-    //                 logger_js_1.logger.logMessage('Erasing database');
-    //                 for (let i = 0; i < this.lstTableMaster.length; i++) {
-    //                     let targetTable = this.lstTableMaster[i].name;
-    //                     await database_js_1.database.execute(`truncate table ${targetTable};`);
-    //                 }
-    //                 for (let i = 0; i < this.lstTableTransaction.length; i++) {
-    //                     let targetTable = this.lstTableTransaction[i].name;
-    //                     await database_js_1.database.execute(`truncate table ${targetTable};`);
-    //                 }
-    //             }
-    //             //delete and re-create CSV folder
-    //             if (fs.existsSync('./csv'))
-    //                 fs.rmSync('./csv', { recursive: true });
-    //             fs.mkdirSync('./csv');
-    //             //dump data exported from Tally to CSV file required for bulk import
-    //             logger_js_1.logger.logMessage('Generating CSV files from Tally [%s]', new Date().toLocaleString());
-    //             if (this.config.master)
-    //                 for (let i = 0; i < this.lstTableMaster.length; i++) {
-    //                     let timestampBegin = Date.now();
-    //                     let targetTable = this.lstTableMaster[i].name;
-    //                     await this.processReport(targetTable, this.lstTableMaster[i], configTallyXML);
-    //                     let timestampEnd = Date.now();
-    //                     let elapsedSecond = utility_js_1.utility.Number.round((timestampEnd - timestampBegin) / 1000, 3);
-    //                     logger_js_1.logger.logMessage('  saving file %s.csv [%f sec]', targetTable, elapsedSecond);
-    //                 }
-    //             if (this.config.transaction)
-    //                 for (let i = 0; i < this.lstTableTransaction.length; i++) {
-    //                     let timestampBegin = Date.now();
-    //                     let targetTable = this.lstTableTransaction[i].name;
-    //                     await this.processReport(targetTable, this.lstTableTransaction[i], configTallyXML);
-    //                     let timestampEnd = Date.now();
-    //                     let elapsedSecond = utility_js_1.utility.Number.round((timestampEnd - timestampBegin) / 1000, 3);
-    //                     logger_js_1.logger.logMessage('  saving file %s.csv [%f sec]', targetTable, elapsedSecond);
-    //                 }
-    //             if (/^(mssql|mysql)$/g.test(database_js_1.database.config.technology)) {
-    //                 //perform CSV file based bulk import into database
-    //                 logger_js_1.logger.logMessage('Loading CSV files to database tables [%s]', new Date().toLocaleString());
-    //                 if (this.config.master)
-    //                     for (let i = 0; i < this.lstTableMaster.length; i++) {
-    //                         let targetTable = this.lstTableMaster[i].name;
-    //                         let rowCount = await database_js_1.database.bulkLoad(path.join(process.cwd(), `./csv/${targetTable}.csv`), targetTable);
-    //                         logger_js_1.logger.logMessage('  %s: imported %d rows', targetTable, rowCount);
-    //                     }
-    //                 if (this.config.transaction)
-    //                     for (let i = 0; i < this.lstTableTransaction.length; i++) {
-    //                         let targetTable = this.lstTableTransaction[i].name;
-    //                         let rowCount = await database_js_1.database.bulkLoad(path.join(process.cwd(), `./csv/${targetTable}.csv`), targetTable);
-    //                         logger_js_1.logger.logMessage('  %s: imported %d rows', targetTable, rowCount);
-    //                     }
-    //             }
-    //             else {
-    //                 //remove special character of date from CSV files, which was inserted for null dates
-    //                 if (this.config.master)
-    //                     for (let i = 0; i < this.lstTableMaster.length; i++) {
-    //                         let targetTable = this.lstTableMaster[i].name;
-    //                         let content = fs.readFileSync(`./csv/${targetTable}.csv`, 'utf-8');
-    //                         content = content.replace(/\"ñ\"/g, '\"\"');
-    //                         fs.writeFileSync(`./csv/${targetTable}.csv`, '\ufeff' + content);
-    //                     }
-    //                 if (this.config.transaction)
-    //                     for (let i = 0; i < this.lstTableTransaction.length; i++) {
-    //                         let targetTable = this.lstTableTransaction[i].name;
-    //                         let content = fs.readFileSync(`./csv/${targetTable}.csv`, 'utf-8');
-    //                         content = content.replace(/\"ñ\"/g, '\"\"');
-    //                         fs.writeFileSync(`./csv/${targetTable}.csv`, '\ufeff' + content);
-    //                     }
-    //             }
-    //             resolve();
-    //         }
-    //         catch (err) {
-    //             logger_js_1.logger.logError('tally.processMasters()', err);
-    //             reject(err);
-    //         }
-    //     });
-    // }
+    importData() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // if (/^(mssql|mysql)$/g.test(database_js_1.database.config.technology)) {
+                //     //update active company information before starting import
+                //     logger_js_1.logger.logMessage('Updating company information configuration table [%s]', new Date().toLocaleDateString());
+                //     await this.saveCompanyInfo();
+                // }
+                //prepare substitution list of runtime values to reflected in TDL XML
+                let configTallyXML = new Map();
+                configTallyXML.set('fromDate', utility_js_1.utility.Date.parse(this.config.fromdate, 'yyyy-MM-dd'));
+                configTallyXML.set('toDate', utility_js_1.utility.Date.parse(this.config.todate, 'yyyy-MM-dd'));
+                configTallyXML.set('targetCompany', this.config.company ? utility_js_1.utility.String.escapeHTML(this.config.company) : '##SVCurrentCompany');
+                // if (/^(mssql|mysql)$/g.test(database_js_1.database.config.technology)) {
+                //     //truncate master/transaction tables
+                //     logger_js_1.logger.logMessage('Erasing database');
+                //     for (let i = 0; i < this.lstTableMaster.length; i++) {
+                //         let targetTable = this.lstTableMaster[i].name;
+                //         await database_js_1.database.execute(`truncate table ${targetTable};`);
+                //     }
+                //     for (let i = 0; i < this.lstTableTransaction.length; i++) {
+                //         let targetTable = this.lstTableTransaction[i].name;
+                //         await database_js_1.database.execute(`truncate table ${targetTable};`);
+                //     }
+                // }
+                //delete and re-create CSV folder
+                if (fs.existsSync('./csv'))
+                    fs.rmSync('./csv', { recursive: true });
+                fs.mkdirSync('./csv');
+                //dump data exported from Tally to CSV file required for bulk import
+                logger_js_1.logger.logMessage('Generating CSV files from Tally [%s]', new Date().toLocaleString());
+                if (this.config.master)
+                    for (let i = 0; i < this.lstTableMaster.length; i++) {
+                        let timestampBegin = Date.now();
+                        let targetTable = this.lstTableMaster[i].name;
+                        await this.processReport(targetTable, this.lstTableMaster[i], configTallyXML);
+                        let timestampEnd = Date.now();
+                        let elapsedSecond = utility_js_1.utility.Number.round((timestampEnd - timestampBegin) / 1000, 3);
+                        logger_js_1.logger.logMessage('  saving file %s.csv [%f sec]', targetTable, elapsedSecond);
+                    }
+                if (this.config.transaction)
+                    for (let i = 0; i < this.lstTableTransaction.length; i++) {
+                        let timestampBegin = Date.now();
+                        let targetTable = this.lstTableTransaction[i].name;
+                        await this.processReport(targetTable, this.lstTableTransaction[i], configTallyXML);
+                        let timestampEnd = Date.now();
+                        let elapsedSecond = utility_js_1.utility.Number.round((timestampEnd - timestampBegin) / 1000, 3);
+                        logger_js_1.logger.logMessage('  saving file %s.csv [%f sec]', targetTable, elapsedSecond);
+                    }
+                // if (/^(mssql|mysql)$/g.test(database_js_1.database.config.technology)) {
+                //     //perform CSV file based bulk import into database
+                //     logger_js_1.logger.logMessage('Loading CSV files to database tables [%s]', new Date().toLocaleString());
+                //     if (this.config.master)
+                //         for (let i = 0; i < this.lstTableMaster.length; i++) {
+                //             let targetTable = this.lstTableMaster[i].name;
+                //             let rowCount = await database_js_1.database.bulkLoad(path.join(process.cwd(), `./csv/${targetTable}.csv`), targetTable);
+                //             logger_js_1.logger.logMessage('  %s: imported %d rows', targetTable, rowCount);
+                //         }
+                //     if (this.config.transaction)
+                //         for (let i = 0; i < this.lstTableTransaction.length; i++) {
+                //             let targetTable = this.lstTableTransaction[i].name;
+                //             let rowCount = await database_js_1.database.bulkLoad(path.join(process.cwd(), `./csv/${targetTable}.csv`), targetTable);
+                //             logger_js_1.logger.logMessage('  %s: imported %d rows', targetTable, rowCount);
+                //         }
+                // }
+                // else {
+                    //remove special character of date from CSV files, which was inserted for null dates
+                    // if (this.config.master)
+                    //     for (let i = 0; i < this.lstTableMaster.length; i++) {
+                    //         let targetTable = this.lstTableMaster[i].name;
+                    //         let content = fs.readFileSync(`./csv/${targetTable}.csv`, 'utf-8');
+                    //         content = content.replace(/\"ñ\"/g, '\"\"');
+                    //         fs.writeFileSync(`./csv/${targetTable}.csv`, '\ufeff' + content);
+                    //     }
+                    // if (this.config.transaction)
+                    //     for (let i = 0; i < this.lstTableTransaction.length; i++) {
+                    //         let targetTable = this.lstTableTransaction[i].name;
+                    //         let content = fs.readFileSync(`./csv/${targetTable}.csv`, 'utf-8');
+                    //         content = content.replace(/\"ñ\"/g, '\"\"');
+                    //         fs.writeFileSync(`./csv/${targetTable}.csv`, '\ufeff' + content);
+                    //     }
+                // }
+                resolve();
+            }
+            catch (err) {
+                logger_js_1.logger.logError('tally.processMasters()', err);
+                reject(err);
+            }
+        });
+    }
     postTallyXML(msg) {
         return new Promise((resolve, reject) => {
             try {

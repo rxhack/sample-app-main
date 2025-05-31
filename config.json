@@ -5,7 +5,7 @@
         "port": 3306,
         "schema": "tallydb",
         "username": "root",
-        "password": "admin",
+        "password": "",
         "loadmethod": "insert"
     },
     "tally": {
